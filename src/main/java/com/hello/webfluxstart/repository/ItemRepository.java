@@ -25,6 +25,6 @@ public interface ItemRepository extends ReactiveCrudRepository<Item, String>, Re
     @Query("{ 'name' : ?0, 'age' : ?1 }")
     Flux<Item> findItemsForCustomerMonthlyReport(String name, Integer age);
 
-    @Query(sort = "{ 'age' : -1 }")
+    @Query(value = "{}", sort = "{ 'age' : -1 }")
     Flux<Item> findSortedStuffForWeeklyReport();
 }
