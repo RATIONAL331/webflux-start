@@ -1,8 +1,6 @@
 package com.hello.webfluxstart.controller;
 
 import com.hello.webfluxstart.model.Cart;
-import com.hello.webfluxstart.repository.CartRepository;
-import com.hello.webfluxstart.repository.ItemRepository;
 import com.hello.webfluxstart.service.CartService;
 import com.hello.webfluxstart.service.InventoryService;
 import lombok.RequiredArgsConstructor;
@@ -18,28 +16,25 @@ import reactor.core.publisher.Mono;
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
-
-    private final ItemRepository itemRepository;
-    private final CartRepository cartRepository;
     private final CartService cartService;
     private final InventoryService inventoryService;
 
     @GetMapping
     public Mono<Rendering> home() {
         return Mono.just(Rendering.view("home")
-                                  .modelAttribute("items", itemRepository.findAll())
-                                  .modelAttribute("cart", cartRepository.findById("My Cart")
-                                                                        .defaultIfEmpty(new Cart("My Cart")))
-                                  .modelAttribute("cartItems", cartRepository.findById("My Cart")
-                                                                             .defaultIfEmpty(new Cart("My Cart"))
-                                                                             .map(Cart::getCartItems)
-                                                                             .flatMapMany(Flux::fromIterable))
+                                  .modelAttribute("items", inventoryService.getAllItem())
+                                  .modelAttribute("cart", cartService.getCart("My Cart")
+                                                                     .defaultIfEmpty(new Cart("My Cart")))
+                                  .modelAttribute("cartItems", cartService.getCart("My Cart")
+                                                                          .defaultIfEmpty(new Cart("My Cart"))
+                                                                          .map(Cart::getCartItems)
+                                                                          .flatMapMany(Flux::fromIterable))
                                   .build());
     }
 
     @PostMapping("/add/{id}")
     public Mono<String> addToCart(@PathVariable String id) {
-        return cartService.addToCart("My Cart", id)
+        return cartService.addItemToCart("My Cart", id)
                           .thenReturn("redirect:/");
     }
 

@@ -20,6 +20,10 @@ public class InventoryService {
     private final ReactiveFluentMongoOperations reactiveFluentMongoOperations;
     // private final FluentMongoOperations fluentMongoOperations;
 
+    public Flux<Item> getAllItem() {
+        return itemRepository.findAll();
+    }
+
     // 쿼리 메소드만 사용한 매우 복잡한 로직
     public Flux<Item> search(@Nullable String partialName,
                              @Nullable String partialDescription,
