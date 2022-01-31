@@ -3,7 +3,7 @@ package com.hello.webfluxstart.model;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -18,6 +18,6 @@ public class Cart {
 
     public Cart(String id) {
         this.id = id;
-        this.cartItems = Collections.emptyList();
+        this.cartItems = new ArrayList<>();
     }
 }
