@@ -4,7 +4,6 @@ import com.hello.webfluxstart.model.Item;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.test.context.TestPropertySource;
 
 @DataMongoTest
@@ -12,8 +11,6 @@ import org.springframework.test.context.TestPropertySource;
 // https://www.inflearn.com/questions/370982
 @TestPropertySource(properties = "spring.mongodb.embedded.version=3.5.5")
 public class ItemRepositoryTest {
-    @Autowired
-    ReactiveMongoTemplate reactiveMongoTemplate;
     @Autowired
     ItemRepository repository;
 
