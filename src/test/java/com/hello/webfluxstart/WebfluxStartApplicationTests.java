@@ -13,7 +13,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @AutoConfigureWebTestClient
 @TestPropertySource(properties = "spring.mongodb.embedded.version=3.5.5")
 class WebfluxStartApplicationTests {
-
     @Autowired
     private WebTestClient webTestClient;
 

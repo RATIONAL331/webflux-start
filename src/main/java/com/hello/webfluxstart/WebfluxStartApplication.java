@@ -2,8 +2,6 @@ package com.hello.webfluxstart;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.thymeleaf.TemplateEngine;
-import reactor.blockhound.BlockHound;
 
 @SpringBootApplication
 public class WebfluxStartApplication {
@@ -48,9 +46,6 @@ public class WebfluxStartApplication {
 		 * 		at org.springframework.web.reactive.result.view.ViewResolutionResultHandler.lambda$null$0(ViewResolutionResultHandler.java:248)
 		 */
 		// BlockHound.install(); // 블록 하운드 등록 => 심은 후에 동작하지 않도록 제거하는 것은 불가능
-		BlockHound.builder()
-				  .allowBlockingCallsInside(TemplateEngine.class.getCanonicalName(), "initialize") // 허용할 블록킹 함수 선언
-				  .install();
 		SpringApplication.run(WebfluxStartApplication.class, args);
 	}
 

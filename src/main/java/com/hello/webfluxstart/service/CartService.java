@@ -61,4 +61,26 @@ public class CartService {
                              .log("savedCart");
     }
 
+    @Deprecated
+    public Mono<Cart> addItemCartBlock(String cartId, String itemId) {
+        Cart myCartBlocked = cartRepository.findById(cartId)
+                                           .defaultIfEmpty(new Cart(cartId))
+                                           .block();
+
+        return myCartBlocked.getCartItems()
+                            .stream()
+                            .filter(cartItem -> cartItem.getItem().getId().equals(itemId))
+                            .findAny()
+                            .map(cartItem -> {
+                                cartItem.increment();
+                                return Mono.just(myCartBlocked);
+                            }).orElseGet(() -> itemRepository.findById(itemId)
+                                                             .map(CartItem::new)
+                                                             .map(cartItem -> {
+                                                                 myCartBlocked.getCartItems().add(cartItem);
+                                                                 return myCartBlocked;
+                                                             }))
+                            .flatMap(cartRepository::save);
+    }
+
 }
