@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,14 @@ public class InventoryService {
 
     public Flux<Item> getAllItem() {
         return itemRepository.findAll();
+    }
+
+    public Mono<Item> getItem(String id) {
+        return itemRepository.findById(id);
+    }
+
+    public Mono<Item> saveItem(Item postItem) {
+        return itemRepository.save(postItem);
     }
 
     // 쿼리 메소드만 사용한 매우 복잡한 로직

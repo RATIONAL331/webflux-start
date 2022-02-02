@@ -1,7 +1,7 @@
 package com.hello.webfluxstart.controller;
 
 import com.hello.webfluxstart.model.Item;
-import com.hello.webfluxstart.repository.ItemRepository;
+import com.hello.webfluxstart.service.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,21 +13,21 @@ import java.net.URI;
 @RestController
 @RequiredArgsConstructor
 public class ApiItemController {
-    private final ItemRepository itemRepository;
+    private final InventoryService inventoryService;
 
     @GetMapping("/api/items")
     public Flux<Item> findAllItems() {
-        return itemRepository.findAll();
+        return inventoryService.getAllItem();
     }
 
     @GetMapping("/api/items/{id}")
     public Mono<Item> findOneItem(@PathVariable String id) {
-        return itemRepository.findById(id);
+        return inventoryService.getItem(id);
     }
 
     @PostMapping("/api/items")
     public Mono<ResponseEntity<?>> addNewItem(@RequestBody Mono<Item> item) {
-        return item.flatMap(itemRepository::save)
+        return item.flatMap(inventoryService::saveItem)
                    .map(savedItem -> ResponseEntity.created(URI.create("/api/items/" + savedItem.getId()))
                                                    .body(savedItem));
     }
@@ -39,7 +39,7 @@ public class ApiItemController {
                        replacedItem.setId(id);
                        return replacedItem;
                    })
-                   .flatMap(itemRepository::save)
+                   .flatMap(inventoryService::saveItem)
                    .map(ResponseEntity::ok);
     }
 }
