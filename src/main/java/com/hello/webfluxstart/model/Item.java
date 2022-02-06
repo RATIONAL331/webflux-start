@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@ToString
 public class Item {
     @Id
     private String id;
