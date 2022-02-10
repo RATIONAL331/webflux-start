@@ -39,11 +39,6 @@ public class RabbitTest {
     }
 
     @Test
-    public void init() {
-
-    }
-
-    @Test
     public void 메시지_검증() throws InterruptedException {
         webTestClient.post()
                      .uri("/items")

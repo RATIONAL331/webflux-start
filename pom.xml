@@ -93,6 +93,10 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-rsocket</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
@@ -114,6 +118,12 @@
 			<groupId>org.springframework.restdocs</groupId>
 			<artifactId>spring-restdocs-webtestclient</artifactId>
 			<!-- <artifactId>spring-restdocs-mockmvc</artifactId> 스프링 MV를 사용하면 mockmvc를 사용한다 -->
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.amqp</groupId>
+			<artifactId>spring-rabbit-test</artifactId>
+			<version>2.4.2</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- 테스트 컨테이너 래빗엠큐 모듈, JUnit5을 사용하려면 junit-jupiter 모듈 추가 -->
