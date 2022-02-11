@@ -22,4 +22,8 @@ public class User {
         this.password = password;
         this.roles = roles;
     }
+
+    public static String role(String auth) {
+        return "ROLE_" + auth;
+    }
 }

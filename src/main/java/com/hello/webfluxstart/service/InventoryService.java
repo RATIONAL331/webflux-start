@@ -29,6 +29,10 @@ public class InventoryService {
         return itemRepository.findById(id);
     }
 
+    public Flux<Item> getItemByName(String name) {
+        return itemRepository.findAllByNameContaining(name);
+    }
+
     public Mono<Item> saveItem(Item postItem) {
         return itemRepository.save(postItem);
     }
