@@ -18,4 +18,8 @@ public class CartItem {
     public void increment() {
         quantity++;
     }
+
+    public void decrement() {
+        quantity--;
+    }
 }

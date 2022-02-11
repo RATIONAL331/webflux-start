@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +18,7 @@ public class CartService {
     private final CartRepository cartRepository;
 
     public Mono<Cart> getCart(String id) {
-        return cartRepository.findById("My Cart");
+        return cartRepository.findById(id);
     }
 
     public Mono<Cart> addToCart(String cartId, String id) {
@@ -83,4 +84,22 @@ public class CartService {
                             .flatMap(cartRepository::save);
     }
 
+    public Mono<Cart> removeOneFromCart(String cartName, String itemId) {
+        return cartRepository.findById(cartName)
+                             .defaultIfEmpty(new Cart(cartName))
+                             .flatMap(cart -> cart.getCartItems()
+                                                  .stream()
+                                                  .filter(cartItem -> cartItem.getItem().getId().equals(itemId))
+                                                  .findAny()
+                                                  .map(cartItem -> {
+                                                      cartItem.decrement();
+                                                      return Mono.just(cart);
+                                                  })
+                                                  .orElse(Mono.empty()))
+                             .map(cart -> new Cart(cart.getId(), cart.getCartItems()
+                                                                     .stream()
+                                                                     .filter(cartItem -> cartItem.getQuantity() > 0)
+                                                                     .collect(Collectors.toList())))
+                             .flatMap(this.cartRepository::save);
+    }
 }

@@ -4,11 +4,9 @@ import com.hello.webfluxstart.model.Cart;
 import com.hello.webfluxstart.service.CartService;
 import com.hello.webfluxstart.service.InventoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.result.view.Rendering;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,22 +18,28 @@ public class HomeController {
     private final InventoryService inventoryService;
 
     @GetMapping
-    public Mono<Rendering> home() {
+    public Mono<Rendering> home(Authentication authentication) {
         return Mono.just(Rendering.view("home")
                                   .modelAttribute("items", inventoryService.getAllItem())
-                                  .modelAttribute("cart", cartService.getCart("My Cart")
-                                                                     .defaultIfEmpty(new Cart("My Cart")))
-                                  .modelAttribute("cartItems", cartService.getCart("My Cart")
-                                                                          .defaultIfEmpty(new Cart("My Cart"))
+                                  .modelAttribute("cart", cartService.getCart(Cart.cartName(authentication))
+                                                                     .defaultIfEmpty(new Cart(Cart.cartName(authentication))))
+                                  .modelAttribute("cartItems", cartService.getCart(Cart.cartName(authentication))
+                                                                          .defaultIfEmpty(new Cart(Cart.cartName(authentication)))
                                                                           .map(Cart::getCartItems)
                                                                           .flatMapMany(Flux::fromIterable))
+                                  .modelAttribute("auth", authentication)
                                   .build());
     }
 
     @PostMapping("/add/{id}")
-    public Mono<String> addToCart(@PathVariable String id) {
-        return cartService.addItemToCart("My Cart", id)
+    public Mono<String> addToCart(Authentication authentication, @PathVariable String id) {
+        return cartService.addItemToCart(Cart.cartName(authentication), id)
                           .thenReturn("redirect:/");
+    }
+
+    @DeleteMapping("/add/{id}")
+    public Mono<String> removeFromCart(Authentication authentication, @PathVariable String id) {
+        return cartService.removeOneFromCart(Cart.cartName(authentication), id).thenReturn("redirect:/");
     }
 
     @GetMapping("/search")

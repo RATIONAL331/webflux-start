@@ -2,6 +2,8 @@ package com.hello.webfluxstart.config;
 
 import com.google.auto.service.AutoService;
 import com.mongodb.internal.connection.InternalStreamConnection;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.rsocket.context.RSocketServerBootstrap;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.hateoas.server.reactive.WebFluxLinkBuilder;
 import org.thymeleaf.TemplateEngine;
@@ -18,5 +20,7 @@ public class BlockHoundThymeleafConfig implements BlockHoundIntegration {
         builder.allowBlockingCallsInside(WebFluxLinkBuilder.class.getCanonicalName(), "linkTo");
         builder.allowBlockingCallsInside(WebFluxLinkBuilder.class.getCanonicalName(), "methodOn");
         builder.allowBlockingCallsInside(MessageSourceAccessor.class.getCanonicalName(), "getMessage");
+        builder.allowBlockingCallsInside(RSocketServerBootstrap.class.getCanonicalName(), "start");
+        builder.allowBlockingCallsInside(SpringApplication.class.getCanonicalName(), "run");
     }
 }

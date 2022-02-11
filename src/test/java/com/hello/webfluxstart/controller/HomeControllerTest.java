@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -29,13 +30,14 @@ class HomeControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "bob", roles = {"INVENTORY"})
     public void homePage() {
         Item testItem1 = new Item("name1", "desc1", 1.99);
         testItem1.setId("id1");
         Item testItem2 = new Item("name2", "desc2", 9.99);
         testItem2.setId("id2");
         Mockito.when(inventoryService.getAllItem()).thenReturn(Flux.just(testItem1, testItem2));
-        Mockito.when(cartService.getCart("My Cart")).thenReturn(Mono.just(new Cart("My Cart")));
+        Mockito.when(cartService.getCart("bob's Cart")).thenReturn(Mono.just(new Cart("bob's Cart")));
 
         webTestClient.get().uri("/").exchange()
                      .expectStatus().isOk()
