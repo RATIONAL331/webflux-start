@@ -37,6 +37,10 @@ public class InventoryService {
         return itemRepository.save(postItem);
     }
 
+    public Mono<Void> deleteItem(String id) {
+        return itemRepository.deleteById(id);
+    }
+
     // 쿼리 메소드만 사용한 매우 복잡한 로직
     public Flux<Item> search(@Nullable String partialName,
                              @Nullable String partialDescription,

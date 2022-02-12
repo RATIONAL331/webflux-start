@@ -3,7 +3,7 @@ package com.hello.webfluxstart.config;
 import com.hello.webfluxstart.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
@@ -19,6 +19,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
  * 2. HTTP FORM을 활성화 하여 로그인 되지 않은 사용자는 브라우저 기본 로그인 팝업 창 대신에 스프링 시큐리티가 제공하는 로그인 페이지로 리다익렉트 된다.
  * 3. 인증에 성공하면 애플리케이션의 모든 자원에 접근 가능하다.
  */
+@EnableReactiveMethodSecurity // 메소드 수준 보안 설정
 public class SecurityConfig {
     public static final String USER = "USER";
     public static final String INVENTORY = "INVENTORY";
@@ -34,23 +35,37 @@ public class SecurityConfig {
                                                           .build());
     }
 
+//    메소드 수준 보안을 사용하려면 pathMatcher()를 제거해야 한다.
+//    @Bean
+//    public SecurityWebFilterChain myCustomSecurityPolicy(ServerHttpSecurity httpSecurity) {
+//        return httpSecurity.authorizeExchange(authorizeExchangeSpec -> authorizeExchangeSpec.pathMatchers(HttpMethod.POST, "/**")
+//                                                                                            .hasRole(INVENTORY)
+//                                                                                            // '/**'로 들오오는 POST 요청은 ROLE_INVENTORY라는 역할을 가진 사용자로부터 전송되었을 때만 허용
+//                                                                                            .pathMatchers(HttpMethod.DELETE, "/**")
+//                                                                                            .hasRole(INVENTORY)
+//                                                                                            // '/**'로 들어오는 DELETE 요청은 ROLE_INVENTORY라는 역할을 가진 사용자로부터 전송되었을 때만 허용
+//                                                                                            .anyExchange().authenticated()
+//                                                                                            // 규칙에 어긋나는 모든 요청은 더 이상 전진 불가
+//                                                                                            .and()
+//                                                                                            .httpBasic()
+//                                                                                            // HTTP BASIC 인증 허용 => SSL로 보호된 요청을 사용하지 않으면 비밀번호가 탈취될 수 있다.
+//                                                                                            .and()
+//                                                                                            .formLogin())
+//                           .csrf()
+//                           .disable()
+//                           .build();
+//    }
+
     @Bean
     public SecurityWebFilterChain myCustomSecurityPolicy(ServerHttpSecurity httpSecurity) {
-        return httpSecurity.authorizeExchange(authorizeExchangeSpec -> authorizeExchangeSpec.pathMatchers(HttpMethod.POST, "/**")
-                                                                                            .hasRole(INVENTORY)
-                                                                                            // '/**'로 들오오는 POST 요청은 ROLE_INVENTORY라는 역할을 가진 사용자로부터 전송되었을 때만 허용
-                                                                                            .pathMatchers(HttpMethod.DELETE, "/**")
-                                                                                            .hasRole(INVENTORY)
-                                                                                            // '/**'로 들어오는 DELETE 요청은 ROLE_INVENTORY라는 역할을 가진 사용자로부터 전송되었을 때만 허용
-                                                                                            .anyExchange().authenticated()
-                                                                                            // 규칙에 어긋나는 모든 요청은 더 이상 전진 불가
+        return httpSecurity.authorizeExchange(authorizeExchangeSpec -> authorizeExchangeSpec.anyExchange()
+                                                                                            .authenticated()
                                                                                             .and()
                                                                                             .httpBasic()
                                                                                             // HTTP BASIC 인증 허용 => SSL로 보호된 요청을 사용하지 않으면 비밀번호가 탈취될 수 있다.
                                                                                             .and()
                                                                                             .formLogin())
-                           .csrf()
-                           .disable()
+                           .csrf().disable()
                            .build();
     }
 }
