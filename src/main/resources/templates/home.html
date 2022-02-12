@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Getting Started</title>
@@ -16,9 +16,32 @@
         <td th:text="${auth.authorities}"></td>
     </tr>
 </table>
-<form action="/logout" method="post">
-    <input type="submit" value="Logout">
-</form>
+<!--<div sec:authorize="isAuthenticated()">-->
+<!--    <table>-->
+<!--        <tr>-->
+<!--            <td>User: </td>-->
+<!--            <td><span sec:authentication="name"></span></td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td>Authorities:</td>-->
+<!--            <td th:text="${authorities}"></td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td>UserName: </td>-->
+<!--            <td th:text="${userName}"></td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td>ClientName: </td>-->
+<!--            <td th:text="${clientName}"></td>-->
+<!--        </tr>-->
+<!--        <tr th:each="userAttribute : ${userAttributes}">-->
+<!--            Attribute: <td th:text="${userAttribute}"></td>-->
+<!--        </tr>-->
+<!--    </table>-->
+<!--    <form th:action="@{/logout}" method="post">-->
+<!--        <input type="submit" value="Logout">-->
+<!--    </form>-->
+<!--</div>-->
 <hr>
 <table>
     <thead>

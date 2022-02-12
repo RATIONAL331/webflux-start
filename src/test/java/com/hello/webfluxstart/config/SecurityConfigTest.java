@@ -27,7 +27,7 @@ class SecurityConfigTest {
     @WithMockUser(username = "alice", roles = {"SOME_OTHER_ROLE"})
     public void 허가받지_않은_사용자의_추가_삽입() {
         webTestClient.post()
-                     .uri("/api/items")
+                     .uri("/api/items/add")
                      .bodyValue(testedItem)
                      .exchange()
                      .expectStatus()
@@ -38,7 +38,7 @@ class SecurityConfigTest {
     @WithMockUser(username = "bob", roles = {"INVENTORY"})
     public void INVENTORY_롤을_가진_사람이면_등록되어야_함() {
         webTestClient.post()
-                     .uri("/api/items")
+                     .uri("/api/items/add")
                      .bodyValue(testedItem)
                      .exchange()
                      .expectStatus()

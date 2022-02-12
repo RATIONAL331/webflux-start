@@ -31,6 +31,25 @@ public class HomeController {
                                   .build());
     }
 
+//    @GetMapping
+//    // GCP 승인된 리디렉션으로 http://localhost:{port}/login/oauth2/code/google 설정
+//    public Mono<Rendering> home(@RegisteredOAuth2AuthorizedClient OAuth2AuthorizedClient auth2AuthorizedClient,
+//                                @AuthenticationPrincipal OAuth2User oAuth2User) {
+//        return Mono.just(Rendering.view("home")
+//                                  .modelAttribute("items", inventoryService.getAllItem())
+//                                  .modelAttribute("cart", cartService.getCart(Cart.cartName(oAuth2User))
+//                                                                     .defaultIfEmpty(new Cart(Cart.cartName(oAuth2User))))
+//                                  .modelAttribute("cartItems", cartService.getCart(Cart.cartName(oAuth2User))
+//                                                                          .defaultIfEmpty(new Cart(Cart.cartName(oAuth2User)))
+//                                                                          .map(Cart::getCartItems)
+//                                                                          .flatMapMany(Flux::fromIterable))
+//                                  .modelAttribute("userName", oAuth2User.getName())
+//                                  .modelAttribute("authorities", oAuth2User.getAuthorities())
+//                                  .modelAttribute("clientName", auth2AuthorizedClient.getClientRegistration().getClientName())
+//                                  .modelAttribute("userAttributes", oAuth2User.getAuthorities())
+//                                  .build());
+//    }
+
     @PostMapping("/add/{id}")
     public Mono<String> addToCart(Authentication authentication, @PathVariable String id) {
         return cartService.addItemToCart(Cart.cartName(authentication), id)
